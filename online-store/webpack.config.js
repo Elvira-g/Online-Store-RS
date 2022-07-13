@@ -28,7 +28,7 @@ module.exports = {
     context: path.resolve(__dirname, 'src'),
     mode: 'development',
     entry: {
-        main:['@babel/polyfill','./index.js']
+        main:['@babel/polyfill','./index.ts']
     },
     output: {
         filename:'bundle.js',
@@ -40,7 +40,7 @@ module.exports = {
         hot: isDev
     },
     resolve: {
-        extensions: ['.js', 'json', '.png'],
+        extensions: ['.tsx', '.ts', '.js', 'json', '.png'],
         alias: {
             '@components': path.resolve(__dirname, 'src/components'),
             '@': path.resolve(__dirname,'src'),
@@ -77,6 +77,11 @@ module.exports = {
                 test: /\.(ttf|woff|woff2)$/,
                 use: ['file-loader']
             },
+            {
+                test: /\.tsx?$/,
+                use: 'ts-loader',
+                exclude: /node_modules/,
+              },
             // {
             //     test: /\.js$/,
             //     exclude: /node_modules/,
