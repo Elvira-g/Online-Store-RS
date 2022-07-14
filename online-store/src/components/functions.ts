@@ -1,14 +1,4 @@
 export function drowCard(block: HTMLElement, id: string, name: string, manufacturer: string, price: string, size: string) {
-    
-    // const cardItem = `<div class="card" id= ${id}>
-    //     <img src="./assets/img/products/${id}.png" alt="" class="card-img">
-    //     <h3 class="card-title">${name}</h3>
-    //     <p class="card-subtitle card-brand">${manufacturer}</p>
-    //     <div class="card-text-block">
-    //         <p class="card-text card-size">размер: ${size}</p>
-    //         <p class="card-text card-price">${price} руб.</p>
-    //     </div>
-    // </div>`;
 
     const cardItem = document.createElement('div');
     cardItem.className = 'card';
@@ -45,7 +35,7 @@ export function drowCard(block: HTMLElement, id: string, name: string, manufactu
 
     const cardBtn = document.createElement('button');
     cardBtn.className = 'card-btn';
-    cardBtn.id = `${id}`;
+    cardBtn.dataset.product = `${id}`;
     cardBtn.innerHTML = 'Купить'
 
     cardItem.appendChild(cardImg);
@@ -54,5 +44,38 @@ export function drowCard(block: HTMLElement, id: string, name: string, manufactu
     cardItem.appendChild(cardTextBlock);
     cardItem.appendChild(cardBtn);
 
-    block.insertAdjacentElement('beforeend', cardItem)
+    block.insertAdjacentElement('beforeend', cardItem);
+}
+
+export function addToCart() {
+    const btns = document.querySelectorAll('.card-btn') as NodeListOf<HTMLButtonElement>;
+    const productsCount = <HTMLDivElement>document.querySelector('.cart-number');
+    let count: string[] = [];
+
+    btns.forEach((btn) => {
+        btn.addEventListener('click', (e)=> {
+            e.preventDefault();
+            if ( btn.classList.contains('added') ) {
+                btn.innerHTML = 'Купить';
+                btn.classList.remove('added');
+                count.pop();
+                if ( count.length >= 1 ) {
+                    productsCount.innerHTML = count.length.toString();
+                } else {
+                    count = [];
+                    productsCount.style.display = 'none';
+                }
+            } else {
+                btn.innerHTML = 'В корзине';
+                btn.classList.add('added');
+                if (btn.dataset.product) {
+                    count.push(btn.dataset.product);
+                    productsCount.style.display = 'flex';
+                    productsCount.innerHTML = count.length.toString();  
+                }
+            }
+            console.log(count.length)
+            console.log(count)
+        })
+    })
 }

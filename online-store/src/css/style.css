@@ -65,8 +65,8 @@ nav {
 }
 
 .cart-number {
+    display: none;
     position: absolute;
-    display: flex;
     justify-content: center;
     align-items: center;
     top: 4px;
@@ -196,7 +196,7 @@ main {
     margin: 0;
     padding: 0 5px;
     font-size: 18px;
-    min-height: 36px;
+    min-height: 41px;
     margin-top: 10px;
 }
 
@@ -233,4 +233,9 @@ main {
 
 .card-btn:hover {
     background: #a7a7a7;
+}
+
+.added {
+    background: #518f39;
+    color: #ffffff;
 }
