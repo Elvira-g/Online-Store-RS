@@ -3,12 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Shop</title>
+    <title>Online Store</title>
 </head>
 <body>
-    <h1>Test shop is here</h1>
     <div class="container">
-        
+        <header>
+            <nav class="nav-block">
+                <a href="#" class="logo-link">
+                    <img src="./assets/img/logo.jpg" alt="" class="logo-img">
+                </a>
+                <ul class="menu-block">
+                    <li class="menu-item"><a href="#" class="menu-link">О нас</a></li>
+                    <li class="menu-item"><a href="#" class="menu-link">Доставка</a></li>
+                    <li class="menu-item"><a href="#" class="menu-link">Контакты</a></li>
+                </ul>
+                <div class="cart-block">
+                    <img src="./assets/img/cart.png" alt="" class="cart-icon">
+                    <div class="cart-number">1</div>
+                </div>
+            </nav>
+        </header>
+        <main>
+            <!-- <section class="hero">
+                    <div class="breadcrumbs-block"></div>
+                    <div class="search-block">
+                        <input type="text" class="search-input" placeholder="search...">
+                    </div>
+            </section> -->
+            <section class="filter-block">
+                    <div class="filter-item filter-reset">
+                        <button class="filter-btn filter-reset-btn">Сбросить фильтры</button>
+                    </div>
+                    <div class="filter-item filter-gender-block">
+                        <h2 class="filter-title">Пол</h2>
+                        <button class="filter-btn male-btn">Мужчины</button>
+                        <button class="filter-btn female-btn">Женщины</button>
+                    </div>
+                    <div class="filter-item filter-seze-block">
+                        <h2 class="filter-title">Размер</h2>
+                        <button class="filter-btn xs-btn">XS</button>
+                        <button class="filter-btn s-btn">S</button>
+                        <button class="filter-btn m-btn">M</button>
+                        <button class="filter-btn l-btn">L</button>
+                    </div>
+                    <div class="filter-item filter-years-block">
+                        <h2 class="filter-title">Коллекция</h2>
+                        <button class="filter-btn 2021-btn">2021</button>
+                        <button class="filter-btn 2021-btn">2022</button>
+                    </div>
+                    <div class="filter-item filter-brand-block">
+                        <h2 class="filter-title">Бренд</h2>
+                        <button class="filter-btn brand-all-btn">Все</button>
+                        <button class="filter-btn burberry-btn">Burberry</button>
+                        <button class="filter-btn goose-btn">Canada Goose</button>
+                        <button class="filter-btn hm-btn">H&M</button>
+                        <button class="filter-btn karl-btn">Karl Lagerfeld</button>
+                        <button class="filter-btn adidas-btn">Adidas</button>
+                    </div>
+                    <div class="filter-item filter-color-block">
+                        <h2 class="filter-title">Цвет</h2>
+                        <button class="filter-btn color-all-btn">Все</button>
+                        <button class="filter-btn color-btn beige-btn"></button>
+                        <button class="filter-btn color-btn black-btn"></button>
+                        <button class="filter-btn color-btn white-btn"></button>
+                        <button class="filter-btn color-btn pink-btn"></button>
+                        <button class="filter-btn color-btn grey-btn"></button>
+                    </div>
+                    <div class="filter-item filter-popular-block"></div>
+            </section>
+            <section class="main-block">
+                    <div class="sorting-block">
+                        <div class="sorting-price-block">
+                            <input type="range" id="price" name="price"
+                                min="0" max="12" list="pricelist">
+                                <datalist id="pricelist">
+                                    <option value="0">
+                                    <option value="2">
+                                    <option value="4">
+                                    <option value="6">
+                                    <option value="8">
+                                    <option value="10">
+                                    <option value="12">
+                                  </datalist>
+                            <label for="price">Цена</label>
+                        </div>
+                        <div class="sorting-years-block">
+                            <input type="range" id="count" name="count" 
+                                min="0" max="100" value="90" step="1">
+                            <label for="count">Количество на складе</label>
+                        </div>
+                        <div class="search-block">
+                            <input type="text" class="search-input" placeholder="search...">
+                            <button class="filter-btn search-btn">-></button>
+                        </div>
+                    </div>
+                    <div class="cards-block">
+                        <!-- <div class="card">
+                            <img src="./assets/img/products/1.png" alt="" class="card-img">
+                            <h3 class="card-title">Тренч из габардина со вставкой в клетку</h3>
+                            <p class="card-subtitle card-brand">Burberry</p>
+                            <div class="card-text-block">
+                                <p class="card-text card-size">размер: s</p>
+                                <p class="card-text card-price">110 000 руб.</p>
+                            </div>
+                        </div> -->
+                    </div>
+            </section>
+        </main>
+        <footer>
+        </footer>
     </div>
+
 </body>
 </html>
