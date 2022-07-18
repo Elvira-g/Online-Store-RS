@@ -16,6 +16,7 @@ class Card {
     
     drawAllCards(data: ICard[]) {
         const cards: ICard[] = data;
+        console.log(cards)
         cards.forEach((card: ICard) => {
             drowCard(this.block, card.id, card.name, card.manufacturer, card.price, card.size);
         })

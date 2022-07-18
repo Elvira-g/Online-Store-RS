@@ -1,4 +1,5 @@
 export function drowCard(block: HTMLElement, id: string, name: string, manufacturer: string, price: string, size: string) {
+    console.log(id, name);
 
     const cardItem = document.createElement('div');
     cardItem.className = 'card';
@@ -36,7 +37,20 @@ export function drowCard(block: HTMLElement, id: string, name: string, manufactu
     const cardBtn = document.createElement('button');
     cardBtn.className = 'card-btn';
     cardBtn.dataset.product = `${id}`;
-    cardBtn.innerHTML = 'Купить'
+    cardBtn.innerHTML = 'Купить';
+
+
+        if (localStorage.addedToCart == undefined) {
+            console.log('no addedToCart storage')
+        } else {
+            const addedCadrs: string[] = JSON.parse(localStorage.addedToCart);
+            addedCadrs.forEach((item) => {
+                if ( item == id ) {
+                    cardBtn.classList.add('added');
+                    cardBtn.innerHTML = 'В корзине';
+                }
+            })
+        }
 
     cardItem.appendChild(cardImg);
     cardItem.appendChild(cardTitle);
@@ -51,10 +65,21 @@ export function addToCart() {
     const btns = document.querySelectorAll('.card-btn') as NodeListOf<HTMLButtonElement>;
     const productsCount = <HTMLDivElement>document.querySelector('.cart-number');
     let count: string[] = [];
+    if (localStorage.addedToCart == undefined) {
+        console.log('no addedToCart storage')
+    } else {
+        let addedProducts: string[] = JSON.parse(localStorage.addedToCart);
+        console.log(addedProducts);
+        if (addedProducts.length > 0 ) {
+            count = JSON.parse(localStorage.addedToCart);
+            productsCount.style.display = 'flex';
+            productsCount.innerHTML = addedProducts.length.toString();
+        } 
+    }
 
     btns.forEach((btn) => {
         btn.addEventListener('click', (e)=> {
-            e.preventDefault();
+            // e.preventDefault();
             if ( btn.classList.contains('added') ) {
                 btn.innerHTML = 'Купить';
                 btn.classList.remove('added');
@@ -66,16 +91,24 @@ export function addToCart() {
                     productsCount.style.display = 'none';
                 }
             } else {
-                btn.innerHTML = 'В корзине';
-                btn.classList.add('added');
-                if (btn.dataset.product) {
-                    count.push(btn.dataset.product);
-                    productsCount.style.display = 'flex';
-                    productsCount.innerHTML = count.length.toString();  
+                if ( count.length == 10 ) {
+                    alert('Извините, все слоты заполнены');
+                    return;
+                } else {
+                    btn.innerHTML = 'В корзине';
+                    btn.classList.add('added');
+                    if (btn.dataset.product) {
+                        count.push(btn.dataset.product);
+                        productsCount.style.display = 'flex';
+                        productsCount.innerHTML = count.length.toString();  
+                    }
                 }
             }
-            console.log(count.length)
             console.log(count)
+            localStorage.setItem('addedToCart',JSON.stringify(count))
         })
     })
+
 }
+
+export default addToCart
