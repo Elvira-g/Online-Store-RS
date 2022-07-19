@@ -6,6 +6,8 @@ interface ICard {
     manufacturer: string;
     price: string;
     size: string;
+    count: string;
+    year: string;
 }
 
 
@@ -18,7 +20,7 @@ class Card {
         const cards: ICard[] = data;
         console.log(cards)
         cards.forEach((card: ICard) => {
-            drowCard(this.block, card.id, card.name, card.manufacturer, card.price, card.size);
+            drowCard(this.block, card.id, card.name, card.manufacturer, card.price, card.size, card.count, card.year);
         })
     }
 }

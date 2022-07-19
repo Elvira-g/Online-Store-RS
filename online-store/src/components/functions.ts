@@ -1,4 +1,4 @@
-export function drowCard(block: HTMLElement, id: string, name: string, manufacturer: string, price: string, size: string) {
+export function drowCard(block: HTMLElement, id: string, name: string, manufacturer: string, price: string, size: string, count: string, year: string) {
     console.log(id, name);
 
     const cardItem = document.createElement('div');
@@ -16,7 +16,7 @@ export function drowCard(block: HTMLElement, id: string, name: string, manufactu
     const cardBrand = document.createElement('p');
     cardBrand.className = 'card-subtitle';
     cardBrand.classList.add('card-brand');
-    cardBrand.innerHTML = `${manufacturer}`;
+    cardBrand.innerHTML = `${manufacturer} / ${year}`;
 
     const cardTextBlock = document.createElement('div');
     cardTextBlock.className = 'card-text-block';
@@ -29,10 +29,16 @@ export function drowCard(block: HTMLElement, id: string, name: string, manufactu
     const cardPrice = document.createElement('p');
     cardPrice.className = 'card-text';
     cardPrice.classList.add('card-price');
-    cardPrice.innerHTML = `${price} руб.`;
+    cardPrice.innerHTML = `Стоимость: ${price} руб.`;
+
+    const cardCount = document.createElement('p');
+    cardCount.className = 'card-text';
+    cardCount.classList.add('card-count');
+    cardCount.innerHTML = `Количество: ${count}`;
 
     cardTextBlock.appendChild(cardSize);
     cardTextBlock.appendChild(cardPrice);
+    cardTextBlock.appendChild(cardCount);
 
     const cardBtn = document.createElement('button');
     cardBtn.className = 'card-btn';
@@ -92,7 +98,7 @@ export function addToCart() {
                 }
             } else {
                 if ( count.length == 10 ) {
-                    alert('Извините, все слоты заполнены');
+                    alert('Извините, в корзине не может быть более 10 товаров');
                     return;
                 } else {
                     btn.innerHTML = 'В корзине';
