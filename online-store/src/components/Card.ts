@@ -1,18 +1,9 @@
-import { drowCard } from './functions'
-
-interface ICard {
-    id: string;
-    name: string;
-    manufacturer: string;
-    price: string;
-    size: string;
-    count: string;
-    year: string;
-}
+import { drowCard } from './functions';
+import { ICard } from './interfaces';
 
 
-class Card {
-    constructor (public block: HTMLDivElement) {
+export class Card {
+    constructor (public block: HTMLElement) {
         this.block = block;
     }
     
@@ -20,9 +11,11 @@ class Card {
         const cards: ICard[] = data;
         console.log(cards)
         cards.forEach((card: ICard) => {
-            drowCard(this.block, card.id, card.name, card.manufacturer, card.price, card.size, card.count, card.year);
+            drowCard(this.block, card);
         })
     }
 }
+
+// card.id, card.name, card.manufacturer, card.price, card.size, card.count, card.year
 
 export default Card
