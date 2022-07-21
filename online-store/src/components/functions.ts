@@ -151,6 +151,16 @@ export function showFilteredProducts(block: HTMLElement, allFilters: IFilters, p
     }
 }
 
+export function showPopularProducts(block: HTMLElement, allFilters: IFilters, productsArr: ICard[]) {
+    let popularProducts: ICard[]= []
+    productsArr.forEach((product) => {
+        if ( product.popular ) {
+            popularProducts.push(product)
+        }
+    })
+    showFilteredProducts(block, allFilters, popularProducts);
+}
+
 export function setDefaultPrices(allPrices: number[], sliderOne: HTMLInputElement, sliderTwo: HTMLInputElement) {
     data.forEach((product) => {
         allPrices.push(product.priceNum);
@@ -200,7 +210,7 @@ export function fillColor(sliderOne: string, sliderTwo: string){
     sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , rgb(92, 92, 92) ${percent1}% , rgb(92, 92, 92) ${percent2}%, #dadae5 ${percent2}%)`;
 }
 
-export function changeSorting(block: HTMLElement, isSorted: boolean, sliderOne: HTMLInputElement, sliderTwo: HTMLInputElement, allFilters: IFilters) {
+export function changeSorting(block: HTMLElement, isSorted: boolean, isPopular: boolean, sliderOne: HTMLInputElement, sliderTwo: HTMLInputElement, allFilters: IFilters) {
     let minValue = sliderOne.valueAsNumber;
     let maxValue = sliderTwo.valueAsNumber;
     allFilters.price = [];
@@ -214,7 +224,12 @@ export function changeSorting(block: HTMLElement, isSorted: boolean, sliderOne: 
     if ( isSorted ) {
         sortByPrice(allFilters);
     }
-    showFilteredProducts(block, allFilters, data);
+    if ( isPopular ) {
+        showPopularProducts(block, allFilters, data)
+    } else {
+        showFilteredProducts(block, allFilters, data);
+    }
+    
 }
 
 export function sortByPrice(allFilters: IFilters) {

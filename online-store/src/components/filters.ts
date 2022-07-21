@@ -1,7 +1,5 @@
 
-// import Card from './Card';
-// import addToCart from './functions';
-import {showFilteredProducts, setDefaultPrices, slideOne, slideTwo, changeSorting, sortByPrice, serchProducts} from './functions';
+import {showFilteredProducts, showPopularProducts, setDefaultPrices, slideOne, slideTwo, changeSorting, sortByPrice, serchProducts} from './functions';
 import { IFilters, ICard } from './interfaces';
 
 const filtersFunc = (data: ICard[]) => { 
@@ -12,15 +10,9 @@ const filtersFunc = (data: ICard[]) => {
 
     let sliderOne = <HTMLInputElement>document.getElementById("slider-1");
     let sliderTwo = <HTMLInputElement>document.getElementById("slider-2");
-    // let displayValOne = document.getElementById("range1");
-    // let displayValTwo = document.getElementById("range2");
-    // let minGap = 0;
-    // let sliderTrack = document.querySelector(".slider-track");
-    // let sliderMaxValue;
-
-    // let newProducts = [];
     let allPrices: number[] = [];
     let isSorted: boolean = false;
+    let isPopular: boolean = false;
 
     let allFilters: IFilters = {
         'years': [],
@@ -32,8 +24,9 @@ const filtersFunc = (data: ICard[]) => {
         'priceNum': [],
     }
 
+    //get information from local storage
     if (localStorage.checkedFilters == undefined) {
-        // checkedFilters = JSON.parse(localStorage.checkedFilters);
+
     } else {
         let checkedFilters: {[key: string]: string[]} = JSON.parse(localStorage.checkedFilters);
         for ( let key in checkedFilters ) {
@@ -45,23 +38,32 @@ const filtersFunc = (data: ICard[]) => {
                         key === 'size' ||
                         key === 'gender' ||
                         key === 'color' ||
-                        key === 'price') {
-                            
+                        key === 'price') {    
                             allFilters[key].push(filter)  
                     }
                     
                 })
             }
         }
-        // showFilteredProducts(allFilters);
     }
+    for ( let key in allFilters ) {
+        let filters = allFilters[key];
+        filters.forEach((filter: string | number) => {
+            filterBtns.forEach((btn) => {
+                if ( btn.id == filter.toString() ) {
+                    btn.classList.add('active-filter');
+                }
+            })
+        })
+    }
+
     showFilteredProducts(block, allFilters, data);
 
     setDefaultPrices(allPrices, sliderOne, sliderTwo);
 
+    //set function on filters click
     filterBtns.forEach((filterBtn) => {
         filterBtn.addEventListener('click', (e) => {
-            // console.log(allFilters);
             if ( filterBtn.classList.contains('filter-reset-btn') ) {
                 allFilters.years = [];
                 allFilters.manufacturer = [];
@@ -70,13 +72,31 @@ const filtersFunc = (data: ICard[]) => {
                 allFilters.color = [];
                 allFilters.price = [];
                 if (isSorted) {
+                    isSorted = false;
                     sortByPrice(allFilters);
                 }
                 filterBtns.forEach((btn) =>  {
                     btn.classList.remove('active-filter');
                 })
+                if ( isPopular ) {
+                    isPopular = false;
+                }
                 setDefaultPrices(allPrices, sliderOne, sliderTwo);
 
+            } else if ( filterBtn.classList.contains('filter-popular-block') ) {
+                if ( isSorted ) {
+                    sortByPrice(allFilters)
+                }
+                if ( filterBtn.classList.contains('active-filter') ) {
+                    filterBtn.classList.remove('active-filter');
+                    showFilteredProducts(block, allFilters, data);
+                    isPopular = false
+                } else {
+                    filterBtn.classList.add('active-filter');
+                    showPopularProducts(block, allFilters, data);
+                    isPopular = true
+                }
+                
             } else {
                 const filter: string = filterBtn.id;
                 const filteredCategory = <HTMLButtonElement>filterBtn.parentElement;
@@ -84,7 +104,6 @@ const filtersFunc = (data: ICard[]) => {
                 if (filteredCategory.dataset.filter != undefined) {
                     category = filteredCategory.dataset.filter; 
                 }
-   
 
                 for ( let key in allFilters ) {
                     if ( category === key ) {
@@ -107,120 +126,36 @@ const filtersFunc = (data: ICard[]) => {
                     }
                 }
             }
-            showFilteredProducts(block, allFilters, data);
+            if ( isSorted ) {
+                sortByPrice(allFilters)
+            }
+            if ( isPopular ) {
+                showPopularProducts(block, allFilters, data)
+            } else {
+                showFilteredProducts(block, allFilters, data);
+            }
+            
         })
     })
 
-    // function showFilteredProducts(allFilters, productsArr = data) {
-    //     block.innerHTML = '';
-    //     for (let key in allFilters) {
-    //         let filters = allFilters[key];
-    //         if ( filters.length != 0 ) {
-    //             let newProducts = [];
-    //             filters.forEach((filter) => {
-    //                 productsArr.forEach((product) => {
-    //                     for ( let key in product ) {
-    //                         if ( product[key] === filter ) {
-    //                             newProducts.push(product)
-    //                         }
-    //                     }
-    //                 })
-    //             })
-    //             productsArr = newProducts;
-    //         }
-    //     }
-    //     if ( productsArr.length == 0 ) {
-    //         block.innerHTML = 'Нет товаров по выбранным категориям';
-    //     } else {
-    //         console.log(productsArr)
-    //         const newCards = new Card(block);
-    //         newCards.drawAllCards(productsArr); 
-    //         addToCart();
-    //         localStorage.setItem('checkedFilters',JSON.stringify(allFilters))
-    //     }
-    // }
-
-
-    // function setDefaultPrices() {
-    //     data.forEach((product) => {
-    //         allPrices.push(product.priceNum);
-    //     })
-
-    //     let minPrice = Math.min(...allPrices).toString();
-    //     let maxPrice = Math.max(...allPrices).toString(); 
-    //     sliderOne.min = Math.min(...allPrices);
-    //     sliderOne.max = Math.max(...allPrices);
-    //     sliderTwo.min = Math.min(...allPrices);
-    //     sliderTwo.max = Math.max(...allPrices);
-    //     sliderOne.value = minPrice;
-    //     sliderTwo.value = maxPrice;
-    //     console.log(sliderOne.value);
-    //     console.log(sliderTwo.value);
-    //     sliderMaxValue = document.getElementById("slider-1").max;
-    
-    //     slideOne();
-    //     slideTwo();
-    // }
-
-
+    //price slider function
     sliderOne.addEventListener('input', () => {
         slideOne(sliderOne, sliderTwo);
-        changeSorting(block, isSorted, sliderOne, sliderTwo, allFilters)
+        changeSorting(block, isSorted, isPopular, sliderOne, sliderTwo, allFilters)
     })
 
     sliderTwo.addEventListener('input', () => {
         slideTwo(sliderOne, sliderTwo);
-        changeSorting(block, isSorted, sliderOne, sliderTwo, allFilters)
+        changeSorting(block, isSorted, isPopular, sliderOne, sliderTwo, allFilters)
     })
 
-    // function slideOne() {
-    //     if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap){
-    //         sliderOne.value = parseInt(sliderTwo.value) - minGap;
-    //     }
-    //     displayValOne.textContent = sliderOne.value;
-    //     fillColor();
-    
-    // }
-        
-    // function slideTwo() {
-    //     if(parseInt(sliderTwo.value) - parseInt(sliderOne.value) <= minGap){
-    //         sliderTwo.value = parseInt(sliderOne.value) + minGap;
-    //     }
-    //     displayValTwo.textContent = sliderTwo.value;
-    //     fillColor();
-    // }
-        
-    // function fillColor(){
-    //     let percent1 = (parseInt(sliderOne.value)/ parseInt(sliderMaxValue)) * 100;
-    //     let percent2 = (parseInt(sliderTwo.value) / parseInt(sliderMaxValue)) * 100;
-    //     sliderTrack.style.background = `linear-gradient(to right, #dadae5 ${percent1}% , rgb(92, 92, 92) ${percent1}% , rgb(92, 92, 92) ${percent2}%, #dadae5 ${percent2}%)`;
-    // }
-
-
-    // function changeSorting() {
-    //     let minValue = sliderOne.valueAsNumber;
-    //     let maxValue = sliderTwo.valueAsNumber;
-    //     allFilters.price = [];
-    //     data.forEach((product) => {
-    //         if ( product.priceNum >= minValue && product.priceNum <= maxValue) {
-    //             if ( !allFilters.price.includes(product.priceNum) ) {
-    //                 allFilters.price.push(product.priceNum);
-    //             }        
-    //         }
-    //     })
-    //     if ( isSorted ) {
-    //         sortByPrice();
-    //     }
-    //     showFilteredProducts(allFilters);
-    // }
-    
-    
+    //Price sorting menu
     const selectSingle = <HTMLElement>document.querySelector('.sortings-items');
     const selectSingle_title = <HTMLDivElement>selectSingle.querySelector('.sortings-items-title');
     const selectSingle_labels = selectSingle.querySelectorAll('.sortings-label') as NodeListOf<HTMLElement>;
 
-// Toggle menu
     selectSingle_title.addEventListener('click', () => {
+        isSorted = true;
         if ('active' === selectSingle.getAttribute('data-state')) {
             selectSingle.setAttribute('data-state', '');
         } else {
@@ -228,7 +163,6 @@ const filtersFunc = (data: ICard[]) => {
         }
     });
 
-// Close when click to option
     for (let i = 0; i < selectSingle_labels.length; i++) {
     selectSingle_labels[i].addEventListener('click', (evt) => {
         const selectedFilter = <HTMLElement>evt.target;
@@ -241,34 +175,17 @@ const filtersFunc = (data: ICard[]) => {
         item.addEventListener('click', (e) => {
             sortByPrice(allFilters);
             isSorted = true;
-            showFilteredProducts(block, allFilters, data)
+            if ( isPopular ) {
+                showPopularProducts(block, allFilters, data)
+            } else {
+                showFilteredProducts(block, allFilters, data)
+            }
+            
 
         })
     })
 
-    // function sortByPrice() {
-    //     const chosenSort = selectSingle_title.textContent;
-    //     let priceToSort = [];
-
-    //     if ( allFilters.price.length != 0 ) {
-    //         priceToSort = allFilters.price;
-    //     } else {
-    //         data.forEach((product) => {
-    //             priceToSort.push(product.priceNum);
-    //         })
-    //     }
-    //     let filteredPrices = priceToSort.filter((item, index) => priceToSort.indexOf(item) === index)
-    //     if ( chosenSort == 'сначала дешевые' ) {
-    //         filteredPrices.sort((prev, next) => prev - next );
-    //     }
-    //     if ( chosenSort == 'сначала дорогие' ) {
-    //         filteredPrices.sort((prev, next) => next - prev );
-    //     }
-    //     allFilters.price = filteredPrices;
-    // }
-
-    // let searchText = '';
-    // let searchedProducts = []
+    //searching block
     searchInput.addEventListener('input', () => {
         serchProducts(block, allFilters, searchInput,)
     })
@@ -277,18 +194,6 @@ const filtersFunc = (data: ICard[]) => {
         searchInput.value = '';
         serchProducts(block, allFilters, searchInput,);
     })
-
-    // function serchProducts() {
-    //     searchedProducts = [];
-    //     searchText = searchInput.value.toLowerCase();
-    //     data.forEach((card) => {
-    //         const cardName = card.name.replace(/ /g,'').toLowerCase();
-    //         if (cardName.indexOf(searchText) > -1) {
-    //             searchedProducts.push(card);
-    //         }
-    //     })
-    //     showFilteredProducts(allFilters, searchedProducts)
-    // }
 
 }
 
